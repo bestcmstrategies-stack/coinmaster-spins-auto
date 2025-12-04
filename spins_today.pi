@@ -6,7 +6,7 @@ from datetime import datetime
 # Zet hier jouw Tavily API key (gratis trial: https://app.tavily.com)
 TAVILY_API_KEY = "tvly-YOUR-API-KEY-HERE"
 
-client = TavilyClient(api_key=TAVILY_API_KEY)
+client = TavilyClient(api_key=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)
 
 def get_today_spins():
     query = f"coin master free spins links today {datetime.now().strftime('%B %d, %Y')}"
