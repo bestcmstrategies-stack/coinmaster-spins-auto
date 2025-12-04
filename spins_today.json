@@ -1,14 +1,8 @@
 {
-  "date": "December 04, 2025",
-  "total": 2,
-  "links": [
-    {
-      "reward": "250 Free Spins",
-      "url": "https://rewards.coinmaster.com/rewards/rewards.html?c=pe_TODAY_20251204"
-    },
-    {
-      "reward": "100 Free Spins",
-      "url": "https://rewards.coinmaster.com/rewards/rewards.html?c=pe_RICH_20251107"
-    }
-  ]
+  "updated": "December 04, 2025",
+  "days": {
+    "December 04, 2025": [],
+    "December 03, 2025": [],
+    "December 02, 2025": []
+  }
 }
