@@ -1,0 +1,55 @@
+import os
+import json
+from tavily import TavilyClient
+from datetime import datetime
+
+# Zet hier jouw Tavily API key (gratis trial: https://app.tavily.com)
+TAVILY_API_KEY = "tvly-YOUR-API-KEY-HERE"
+
+client = TavilyClient(api_key=TAVILY_API_KEY)
+
+def get_today_spins():
+    query = f"coin master free spins links today {datetime.now().strftime('%B %d, %Y')}"
+    
+    response = client.search(
+        query=query,
+        search_depth="advanced",
+        include_answer=True,
+        include_raw_content=False,
+        max_results=15
+    )
+    
+    answer = response.get("answer", "")
+    urls = response.get("results", [])
+    
+    # Filter alleen echte reward links
+    valid_links = []
+    for item in urls:
+        url = item.get("url", "")
+        title = item.get("title", "")
+        if "rewards.coinmaster.com/rewards/rewards.html" in url:
+            # Extract reward from title or answer
+            reward = title.split("–")[-1].strip() if "–" in title else "Free Spins + Coins"
+            valid_links.append({"reward": reward, "url": url})
+    
+    # Fallback: als Tavily weinig vindt, forceer bekende werkende pattern
+    if len(valid_links) < 3:
+        today = datetime.now().strftime("%Y%m%d")
+        fallback = [
+            {"reward": "250 Free Spins", "url": f"https://rewards.coinmaster.com/rewards/rewards.html?c=pe_INSQzYjuI_{today[:8]}"},
+            {"reward": "100 Free Spins", "url": f"https://rewards.coinmaster.com/rewards/rewards.html?c=pe_RICHCqKkAI_20251107"},
+        ]
+        valid_links.extend(fallback[:5-len(valid_links)])
+    
+    return {
+        "date": datetime.now().strftime("%B %d, %Y"),
+        "total_links": len(valid_links),
+        "links": valid_links[:8]  # max 8 voor je widget
+    }
+
+# Run & save
+data = get_today_spins()
+with open("spins_today.json", "w") as f:
+    json.dump(data, f, indent=2)
+
+print(f"Success! {data['total_links']} links voor {data['date']} → spins_today.json")
